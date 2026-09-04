@@ -1,0 +1,165 @@
+/* ==========================
+   RESPONSIVE DESIGN
+========================== */
+
+@media(max-width:1200px){
+
+    .tour-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .gallery-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:992px){
+
+    .hero{
+        flex-direction:column;
+        gap:50px;
+        text-align:center;
+    }
+
+    .hero-text{
+        width:100%;
+    }
+
+    .hero-images{
+        justify-content:center;
+    }
+
+    .services{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .tour-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .testimonial-grid{
+        grid-template-columns:1fr;
+    }
+
+    .experience{
+        flex-direction:column;
+        gap:40px;
+    }
+
+    .newsletter-content{
+        flex-direction:column;
+        text-align:center;
+        gap:40px;
+    }
+
+    .footer-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .search-box{
+        flex-direction:column;
+        gap:20px;
+    }
+}
+
+@media(max-width:768px){
+
+    .container{
+        width:92%;
+    }
+
+    .nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .menu{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .hero-text h1{
+        font-size:40px;
+    }
+
+    .hero-images{
+        flex-direction:column;
+    }
+
+    .hero-images img{
+        width:100%;
+        max-width:300px;
+        height:350px;
+    }
+
+    .services{
+        grid-template-columns:1fr;
+    }
+
+    .tour-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr;
+    }
+
+    .counter-box{
+        flex-direction:column;
+    }
+
+    .tour-banner{
+        height:250px;
+    }
+
+    .overlay h1{
+        font-size:35px;
+    }
+
+    .subscribe-box{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .subscribe-box input{
+        width:100%;
+    }
+
+    .success-card{
+        padding:40px 25px;
+    }
+
+    .success-card h1{
+        font-size:32px;
+    }
+}
+
+@media(max-width:480px){
+
+    .hero-text h1{
+        font-size:32px;
+    }
+
+    .logo h2{
+        font-size:24px;
+    }
+
+    .success-icon{
+        width:90px;
+        height:90px;
+        font-size:40px;
+    }
+
+    .search-item{
+        flex-direction:column;
+        width:100%;
+    }
+
+    .search-item input{
+        width:100%;
+    }
+}

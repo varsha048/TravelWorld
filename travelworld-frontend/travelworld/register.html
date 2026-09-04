@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Register | TravelWorld</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <section class="auth-section">
+
+        <div class="auth-container">
+
+            <!-- LEFT IMAGE -->
+
+            <div class="auth-image">
+
+                <img src="images/register.png"
+                    alt="Traveller">
+
+            </div>
+
+            <!-- FORM -->
+
+            <div class="auth-form">
+
+                <h2>Register</h2>
+
+                <form onsubmit="registerUser(event)">
+
+                    <input type="text"
+                        id="username"
+                        placeholder="Username"
+                        required>
+
+                    <input type="email"
+                        id="email"
+                        placeholder="Email"
+                        required>
+
+                    <input type="password"
+                        id="password"
+                        placeholder="Password"
+                        required>
+
+                    <p id="registerError" class="form-error"></p>
+
+                    <button type="submit">
+                        Register
+                    </button>
+
+                </form>
+
+                <p>
+                    Already have an account?
+
+                    <a href="login.html">
+                        Login
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/assistant.js"></script>
+
+</body>
+</html>

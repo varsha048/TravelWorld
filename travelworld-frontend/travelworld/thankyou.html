@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel World - Booking Success</title>
+
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container nav">
+
+            <div class="logo">
+                <img src="./images/logo.png" alt="logo">
+            </div>
+
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="tours.html">Tours</a></li>
+            </ul>
+
+            <div class="nav-btns">
+
+                <a href="login.html"
+                    class="login-btn"
+                    id="loginBtn">
+                    Login
+                </a>
+
+                <a href="register.html"
+                    class="register-btn"
+                    id="registerBtn">
+                    Register
+                </a>
+
+                <a href="mybookings.html"
+                    id="myBookingsLink"
+                    style="display:none;"
+                    class="login-btn">
+                    My Bookings
+                </a>
+
+                <button
+                    id="logoutBtn"
+                    onclick="logout()"
+                    style="display:none;"
+                    class="login-btn">
+                    Logout
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <section class="success-section">
+        <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+        <h1>Thank You</h1>
+        <h2>Your tour is booked.</h2>
+        <a href="#" class="home-btn">Back to Home</a>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Ipsum, natus!</p>
+
+                <div class="social-icons">
+                   <i class="fa-solid fa-user-gear"></i>
+                    <i class="fa-brands fa-github"></i>
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Discover</h3>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Tours</a>
+            </div>
+
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <a href="#">Gallery</a>
+                <a href="#">Login</a>
+                <a href="#">Register</a>
+            </div>
+
+            <div class="footer-col2">
+                <h3>Contact</h3>
+
+                <p><i class="fa-solid fa-location-dot"></i><b>Address:</b> Shimogga, Karnataka</p>
+                <p><i class="fa-regular fa-envelope"></i><b>Email:</b> adarshaadi1997@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i><b>Phone:</b> +91 86604 35323</p>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright 2026, Design and develop by Adarsha A Helvar.
+            All rights reserved.
+        </div>
+    </footer>
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/assistant.js"></script>
+</body>
+</html>

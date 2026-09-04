@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelWorld Admin</title>
+<link rel="stylesheet" href="/admin/admin.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="center-screen">
+    <div class="card">
+      <h2>Admin Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="adminLogin()">Login</button>
+      <p id="loginError" class="error"></p>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <section id="dashboardView" class="hidden dashboard-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        TravelWorld
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-tab active" id="tabDashboard" onclick="switchTab('dashboard')">Dashboard</button>
+        <button class="nav-tab" id="tabBookings" onclick="switchTab('bookings')">Bookings</button>
+        <button class="nav-tab" id="tabTours" onclick="switchTab('tours')">Tours</button>
+        <button class="nav-tab" id="tabEscapes" onclick="switchTab('escapes')">Next Escapes</button>
+        <button class="nav-tab" id="tabInquiries" onclick="switchTab('inquiries')">Inquiries</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="adminLogout()">Logout</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="container">
+        
+        <!-- SECTION: DASHBOARD -->
+        <div id="sectionDashboard" class="dashboard-grid">
+          <div class="panel" style="grid-column: 1 / -1; display: flex; gap: 20px;">
+            <div style="flex: 1; background: linear-gradient(135deg, #f97316, #ec4899); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 10px;">Total Revenue</h3>
+                <h2 style="font-size: 32px;">Rs. <span id="dashRevenue">0</span></h2>
+            </div>
+            <div style="flex: 1; background: linear-gradient(135deg, #3b82f6, #2dd4bf); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 10px;">Total Bookings</h3>
+                <h2 style="font-size: 32px;"><span id="dashBookings">0</span></h2>
+            </div>
+          </div>
+          
+          <div class="panel">
+              <h2>Revenue Over Time</h2>
+              <div style="position: relative; height: 300px; width: 100%;">
+                  <canvas id="revenueChart"></canvas>
+              </div>
+          </div>
+          
+          <div class="panel">
+              <h2>Popular Tours</h2>
+              <div style="position: relative; height: 300px; width: 100%;">
+                  <canvas id="popularToursChart"></canvas>
+              </div>
+          </div>
+        </div>
+
+        <!-- SECTION: TOURS -->
+        <div id="sectionTours" class="hidden dashboard-grid">
+          <div class="panel">
+            <h2 id="formTitle">Add New Tour</h2>
+            <input type="hidden" id="tourId">
+            <input type="text" id="title" placeholder="Title">
+            <input type="text" id="city" placeholder="City">
+            <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center;">
+              <input type="text" id="photo" placeholder="Photo path (e.g. images/tour-img01.jpg)" style="flex: 1; margin: 0;">
+              <input type="file" id="photoFile" accept="image/*" style="width: auto; padding: 4px;" onchange="uploadImage()">
+            </div>
+            <textarea id="desc" placeholder="Description"></textarea>
+            <input type="number" id="price" placeholder="Price">
+            <input type="number" id="distance" placeholder="Distance">
+            <input type="number" id="maxGroupSize" placeholder="Max Group Size">
+            <label class="checkbox-label">
+              <input type="checkbox" id="featured"> Featured on home page
+            </label>
+            <div class="form-actions">
+              <button onclick="saveTour()">Save Tour</button>
+              <button class="secondary" onclick="resetForm()">Clear</button>
+            </div>
+          </div>
+
+          <div class="right-column">
+            <div class="panel">
+              <h2>All Tours (<span id="tourCount">0</span>)</h2>
+              <div class="table-container">
+                <table id="tourTable">
+                  <thead>
+                    <tr>
+                      <th>Title</th><th>City</th><th>Price</th><th>Featured</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tourTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End sectionTours -->
+
+        <!-- SECTION: ESCAPES -->
+        <div id="sectionEscapes" class="hidden dashboard-grid">
+          <div class="panel">
+            <h2 id="escFormTitle">Add New Escape</h2>
+            <input type="hidden" id="escId">
+            <input type="text" id="escTitle" placeholder="Title">
+            <input type="text" id="escCity" placeholder="City">
+            <input type="text" id="escPhoto" placeholder="Photo path (e.g. images/tour-img01.jpg)">
+            <textarea id="escDesc" placeholder="Description"></textarea>
+            <textarea id="escItinerary" placeholder="Itinerary (e.g. Day 1: Arrive<br>Day 2: Tour)"></textarea>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+              <input type="number" id="escPrice" placeholder="Price" style="flex: 1; margin: 0;">
+              <input type="number" id="escSlots" placeholder="Total Slots (Default: 20)" style="flex: 1; margin: 0;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+              <div style="flex: 1;"><label>Start Date</label><input type="date" id="escStart" style="margin: 0; width: 100%;" placeholder="YYYY-MM-DD"></div>
+              <div style="flex: 1;"><label>End Date</label><input type="date" id="escEnd" style="margin: 0; width: 100%;" placeholder="YYYY-MM-DD"></div>
+            </div>
+            <div class="form-actions">
+              <button onclick="saveEscape()">Save Escape</button>
+              <button class="secondary" onclick="resetEscapeForm()">Clear</button>
+              <p id="escFormMsg" style="margin-top:10px; font-weight:bold;"></p>
+            </div>
+          </div>
+          
+          <div class="right-column">
+            <div class="panel">
+              <h2>All Escapes</h2>
+              <div class="table-container">
+                <table id="escapeTable">
+                  <thead>
+                    <tr>
+                      <th>Title</th><th>Dates</th><th>Price</th><th>Slots</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="escapeTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Escape Bookings</h2>
+                <button class="btn" style="background: #27ae60; color: white; padding: 10px; border-radius: 5px; border: none; cursor: pointer;" onclick="exportBookings()"><i class="fas fa-file-excel"></i> Export to CSV</button>
+              </div>
+              <p style="color: #666; margin-top: 10px;">Download all customer booking data for your upcoming escapes.</p>
+            </div>
+          </div>
+        </div> <!-- End sectionEscapes -->
+
+        <!-- SECTION: BOOKINGS -->
+        <div id="sectionBookings" class="hidden">
+          <div class="panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>All Customer Bookings</h2>
+              <button class="btn" style="background: #27ae60; color: white; padding: 10px; border-radius: 5px; border: none; cursor: pointer;" onclick="exportBookings()"><i class="fas fa-file-excel"></i> Export Escape Bookings</button>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Customer</th><th>Contact</th><th>Type</th><th>Tour / Escape</th><th>Guests</th><th>Revenue</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div> <!-- End sectionBookings -->
+
+        <!-- SECTION: INQUIRIES -->
+        <div id="sectionInquiries" class="hidden">
+          <div class="panel">
+            <h2>Customer Inquiries</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Name</th><th>Email</th><th>Message</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="messagesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div> <!-- End sectionInquiries -->
+
+      </div>
+    </main>
+  </section>
+
+  <!-- REPLY MODAL -->
+  <div id="replyModal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center;">
+    <div class="card" style="width: 500px; max-width: 90%;">
+      <h2>Reply to Customer</h2>
+      <p><strong>To: </strong><span id="replyEmailLabel"></span></p>
+      <input type="hidden" id="replyEmailInput">
+      <textarea id="replyTextInput" rows="6" placeholder="Type your reply here..." style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+      <div class="form-actions" style="margin-top: 15px;">
+        <button onclick="sendReply()">Send Reply</button>
+        <button class="secondary" onclick="closeReplyModal()">Cancel</button>
+      </div>
+      <p id="replyStatus" style="margin-top: 10px;"></p>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Local backend data and generated files
+travelworld-backend-python/backend-python/instance/
+travelworld-backend-python/backend-python/static/uploads/
+travelworld-backend-python/backend-python/static/tickets/
+travelworld-backend-python/backend-python/stripe.exe
+*.sqlite
+*.sqlite3
+*.db
+
+# Local archives and exported documents
+travelworld-backend-python.zip
+travelworld-frontend.zip
+TravelWorld.pptx
+VarshaP_ProjectSynopsis.pdf
+
+# Backup copy
+travelworld-frontend-backup/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.lnk
+desktop.ini

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - TravelWorld</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .profile-section {
+            padding: 80px 0;
+        }
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        .profile-sidebar {
+            flex: 1;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+        .profile-sidebar img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            margin-bottom: 20px;
+        }
+        .profile-content {
+            flex: 3;
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 15px;
+        }
+        .history-card {
+            background: var(--bg-light);
+            border: 1px solid var(--surface-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-confirmed { background: #dcfce7; color: #166534; }
+        .status-pending { background: #fef08a; color: #854d0e; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav">
+            <div class="logo">
+                <img src="./images/logo.png" alt="logo">
+            </div>
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="tours.html">Tours</a></li>
+                <li><a href="next-escapes.html">Next Escapes</a></li>
+            </ul>
+            <div class="nav-btns">
+                <button id="darkModeToggle" class="login-btn" style="background:var(--bg-light); color:var(--text-main); border:1px solid var(--surface-border); padding: 8px 12px; margin-right:5px; cursor: pointer;"><i class="fas fa-moon"></i></button>
+                <a href="profile.html" id="profileLink" style="display:none;" class="login-btn">My Profile</a>
+                <a href="login.html" class="login-btn" id="loginBtn">Login</a>
+                <button id="logoutBtn" onclick="logout()" style="display:none;" class="login-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-escapes" style="height: 30vh; background-image: url('images/hero-bg.jpg');">
+        <h1 style="font-size: 3rem;">My Profile</h1>
+    </div>
+
+    <section class="profile-section container">
+        <div class="profile-container">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <img id="profileAvatar" src="images/default-avatar.png" alt="Avatar">
+                <h3 id="profileName" style="margin-bottom: 5px;">Traveler</h3>
+                <p id="profileEmail" style="color: var(--text-muted); margin-bottom: 20px;">email@example.com</p>
+                
+                <div class="upload-btn-wrapper">
+                    <button class="submit-btn" style="width:100%; padding: 10px; border:none; background:var(--primary); color:white; border-radius:5px; cursor:pointer;">Update Avatar</button>
+                    <input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatar(event)" />
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="profile-content">
+                <div class="profile-header">
+                    <h2>Booking History</h2>
+                    <span style="color: var(--text-muted);"><i class="fas fa-history"></i> Recent Trips</span>
+                </div>
+                
+                <div id="bookingHistoryGrid">
+                    <div class="skeleton-card" style="height: 100px; margin-bottom: 15px;"></div>
+                    <div class="skeleton-card" style="height: 100px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2024. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            
+            document.getElementById("profileName").textContent = user.username || "Traveler";
+            document.getElementById("profileEmail").textContent = user.email || "";
+            if (user.avatarUrl) {
+                document.getElementById("profileAvatar").src = BASE_URL.replace("/api/v1", "") + user.avatarUrl;
+            }
+
+            loadProfileBookings();
+        });
+
+        async function loadProfileBookings() {
+            const grid = document.getElementById("bookingHistoryGrid");
+            try {
+                const res = await apiRequest("/bookings/my");
+                if (res.status === "success" && res.data.length > 0) {
+                    grid.innerHTML = res.data.map(b => {
+                        const statusClass = `status-${b.status.toLowerCase()}`;
+                        const title = b.booking_type === 'escape' ? `Escape Booking #${b.id}` : `Tour Booking #${b.id}`;
+                        const ticketBtn = b.ticket_url ? `<a href="${BASE_URL.replace('/api/v1', '')}${b.ticket_url}" target="_blank" style="color:var(--primary); text-decoration:none;"><i class="fas fa-ticket-alt"></i> View Ticket</a>` : '';
+                        
+                        return `
+                        <div class="history-card">
+                            <div>
+                                <h4 style="margin-bottom: 5px;">${title}</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                                    <i class="far fa-calendar-alt"></i> ${new Date(b.date).toLocaleDateString()} | 
+                                    <i class="fas fa-users"></i> ${b.guests_count || b.guests} Guests
+                                </p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="status-badge ${statusClass}" style="margin-bottom: 10px;">${b.status.toUpperCase()}</div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Rs. ${b.total_price}</div>
+                                ${ticketBtn}
+                            </div>
+                        </div>
+                        `;
+                    }).join("");
+                } else {
+                    grid.innerHTML = `<p style="text-align:center; padding: 30px; color: var(--text-muted);">You haven't booked any trips yet! <br><a href="tours.html" style="color:var(--primary); text-decoration:none; margin-top: 10px; display:inline-block;">Explore Tours</a></p>`;
+                }
+            } catch (err) {
+                grid.innerHTML = `<p style="color:red; text-align:center;">Failed to load bookings.</p>`;
+            }
+        }
+
+        async function uploadAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${BASE_URL}/users/avatar`, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${token}` },
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.status === "success") {
+                    document.getElementById("profileAvatar").src = BASE_URL.replace("/api/v1", "") + data.avatarUrl;
+                    const user = JSON.parse(localStorage.getItem("user"));
+                    user.avatarUrl = data.avatarUrl;
+                    localStorage.setItem("user", JSON.stringify(user));
+                } else {
+                    alert(data.message || "Upload failed");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Error uploading avatar");
+            }
+        }
+    </script>
+</body>
+</html>

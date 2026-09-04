@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel World</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <div class="container nav">
+
+            <div class="logo">
+                <img src="./images/logo.png" alt="logo">
+            </div>
+
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="tours.html">Tours</a></li>
+                <li><a href="build-trip.html"><i class="fa fa-wand-magic-sparkles"></i> Build Trip</a></li>
+                <li><a href="next-escapes.html">Next Escapes</a></li>
+            </ul>
+
+            <div class="nav-btns">
+
+                <a href="login.html"
+                    class="login-btn"
+                    id="loginBtn">
+                    Login
+                </a>
+
+                <a href="register.html"
+                    class="register-btn"
+                    id="registerBtn">
+                    Register
+                </a>
+
+                <a href="mybookings.html"
+                    id="myBookingsLink"
+                    style="display:none;"
+                    class="login-btn">
+                    My Bookings
+                </a>
+
+                <button
+                    id="logoutBtn"
+                    onclick="logout()"
+                    style="display:none;"
+                    class="login-btn">
+                    Logout
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+
+    <section class="hero container">
+
+        <div class="hero-text">
+
+            <span class="tag">
+                Know Before You Go 🌍
+            </span>
+
+            <h1>
+                Travelling opens the doors to creating
+                <span>memories</span>
+            </h1>
+
+            <p>
+                Discover breathtaking destinations,
+                amazing adventures and unforgettable
+                experiences around the world.
+            </p>
+
+        </div>
+
+        <div class="hero-images">
+        
+            <img src="images/hero-img01.jpg" alt="img" class="img1">
+        
+            <video autoplay muted loop playsinline class="video1">
+                <source src="images/hero-video.mp4" type="video/mp4">
+            </video>
+        
+            <img src="images/hero-img02.jpg" alt="img" class="img2">
+        
+        </div>
+
+    </section>
+
+    <!-- SEARCH -->
+
+    <section class="container">
+
+        <div class="search-box magic-search-box">
+            <div class="search-item magic-item">
+                <i class="fa-solid fa-wand-magic-sparkles magic-icon"></i>
+                <div style="flex: 1; width: 100%;">
+                    <h4>Magic Search</h4>
+                    <input
+                        id="magicQuery"
+                        type="text"
+                        placeholder="Describe your dream trip (e.g. 'Romantic beach getaway under Rs.500')"
+                        style="width: 100%;"
+                    >
+                </div>
+            </div>
+            <button onclick="searchTours()" class="magic-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+
+    </section>
+
+    <!-- SERVICES -->
+
+    <section class="container services" id="services">
+
+        <div class="service-title">
+
+            <span>What We Serve</span>
+
+            <h2>We offer our best services</h2>
+
+        </div>
+
+        <div class="service-card">
+
+            <i class="fa-solid fa-cloud-sun"></i>
+
+            <h3>Calculate Weather</h3>
+
+            <p>
+                Get weather forecasts and travel information.
+            </p>
+
+        </div>
+
+        <div class="service-card">
+            <i class="fa-solid fa-route"></i>
+            <h3>Best Tour Guide</h3>
+            <p>
+                Professional guides for memorable experiences.
+            </p>
+
+        </div>
+
+        <div class="service-card">
+            <i class="fa-solid fa-gear"></i>
+            <h3>Customization</h3>
+            <p>
+                Personalized tours tailored to your needs.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- DESTINATIONS LAYOUT -->
+    <section class="container destinations-layout">
+        <div class="left-col">
+            <h2 class="col-title">Top Destinations</h2>
+            <div id="featuredTours" class="top-destinations-list">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+        
+        <div class="right-col">
+            <h2 class="col-title">Explore Destinations</h2>
+            <div class="explore-collage">
+                <div class="collage-item banner-wide" style="background-image: url('images/tour-img01.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Manali'">
+                    <div class="collage-overlay bottom-bar">
+                        <h3><i class="fa-solid fa-heart"></i> KULLU - MANALI Package <i class="fa-solid fa-heart"></i></h3>
+                    </div>
+                </div>
+                <div class="collage-row">
+                    <div class="collage-item banner-half" style="background-image: url('images/tour-img02.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Goa'">
+                        <div class="collage-overlay top-left">
+                            <h2>GOA</h2>
+                            <p>beaches<br>churches<br>temples<br>and more...</p>
+                        </div>
+                    </div>
+                    <div class="collage-item banner-half" style="background-image: url('images/tour-img03.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Bali'">
+                        <div class="collage-overlay centered">
+                            <h2>BALI</h2>
+                            <p>volcanoes, dense tropical jungle,<br>long sandy beaches, crashing surf...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="collage-row">
+                    <div class="collage-item banner-half" style="background-image: url('images/tour-img04.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Malaysia'">
+                        <div class="collage-overlay bottom-right fancy-text">
+                            <h2>malaysia</h2>
+                            <p>to know malaysia is to love Malaysia</p>
+                        </div>
+                    </div>
+                    <div class="collage-item banner-half" style="background-image: url('images/tour-img05.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Thailand'">
+                        <div class="collage-overlay bottom-right fancy-text">
+                            <h2>Thailand</h2>
+                            <p>from sunny beaches to bustling cities and scenic countryside</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="collage-row">
+                    <div class="collage-item banner-third" style="background-image: url('images/tour-img06.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Paris'"></div>
+                    <div class="collage-item banner-third" style="background-image: url('images/tour-img07.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=London'"></div>
+                    <div class="collage-item banner-third" style="background-image: url('images/tour-img01.jpg'); cursor: pointer;" onclick="window.location.href='tours.html?magic=Tokyo'"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+
+    <section class="container experience">
+
+        <div class="experience-text">
+
+           <span class="section-tag">
+    Experience
+</span>
+
+            <h2>
+                With our all experience
+                we will serve you
+            </h2>
+
+            <p>
+                We provide amazing adventures
+                and quality travel services.
+            </p>
+
+            <div class="counter-box">
+
+                <div>
+                    <h3>12k+</h3>
+                    <p>Trips</p>
+                </div>
+
+                <div>
+                    <h3>2k+</h3>
+                    <p>Clients</p>
+                </div>
+
+                <div>
+                    <h3>15</h3>
+                    <p>Years</p>
+                </div>
+            </div>
+        </div>
+        <div class="experience-img">
+            <img src="images/experience.png">
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+
+    <section class="container gallery">
+       <button class="btn">Gallery</button>
+        <h2> Visit our customers tour gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item item1">
+        <img src="images/gallery-01.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item2">
+        <img src="images/gallery-02.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item3">
+        <img src="images/gallery-03.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item4">
+        <img src="images/gallery-04.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item5">
+        <img src="images/gallery-06.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item6">
+        <img src="images/gallery-08.jpg" alt="">
+    </div>
+
+    <div class="gallery-item item7">
+        <img src="images/gallery-05.jpg" alt="">
+    </div>
+     <div class="gallery-item item8">
+        <img src="images/gallery-07.jpg" alt="">
+    </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+        <div class="container newsletter-content">
+            <div class="postcard-wrapper">
+                <div class="postcard-card" id="postcardCard">
+                    <!-- Front (Form) -->
+                    <div class="postcard-front">
+                        <h2>Subscribe & Get a Postcard from the Future! 💌</h2>
+                        <form onsubmit="subscribeNewsletter(event)">
+                            <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+                            <input type="text" id="newsletterDestination" placeholder="Dream Destination (e.g. Bali)" required>
+                            <button type="submit" id="newsletterBtn">Subscribe & Generate</button>
+                        </form>
+                        <p id="newsletterMessage" class="form-error"></p>
+                    </div>
+                    <!-- Back (Postcard) -->
+                    <div class="postcard-back">
+                        <h2>Your Postcard 💌</h2>
+                        <p id="newsletterPostcardText">Loading your magical trip...</p>
+                        <button type="button" onclick="resetPostcard()">Send Another</button>
+                    </div>
+                </div>
+            </div>
+            <img src="images/male-tourist.png">
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="container contact-section">
+        <span class="section-tag">Get in touch</span>
+        <h2>Have a question? Send us a message.</h2>
+
+        <form id="contactForm" class="contact-form" onsubmit="submitContactForm(event)">
+            <input type="text" id="contactName" placeholder="Your Name" required>
+            <input type="email" id="contactEmail" placeholder="Your Email" required>
+            <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+            <p id="contactStatus"></p>
+        </form>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Ipsum, natus!</p>
+
+                <div class="social-icons">
+                   <i class="fa-solid fa-user-gear"></i>
+                    <i class="fa-brands fa-github"></i>
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Discover</h3>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Tours</a>
+            </div>
+
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <a href="#">Gallery</a>
+                <a href="#">Login</a>
+                <a href="#">Register</a>
+            </div>
+
+            <div class="footer-col2">
+                <h3>Contact</h3>
+
+                <p><i class="fa-solid fa-location-dot"></i><b>Address:</b> Shimogga, Karnataka</p>
+                <p><i class="fa-regular fa-envelope"></i><b>Email:</b> adarshaadi1997@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i><b>Phone:</b> +91 86604 35323</p>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright 2026, Design and develop by Adarsha A Helvar.
+            All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/assistant.js"></script>
+
+</body>
+
+</html>

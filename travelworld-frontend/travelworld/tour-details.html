@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Details</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <div class="container nav">
+
+            <div class="logo">
+                <img src="./images/logo.png" alt="logo">
+            </div>
+
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="tours.html">Tours</a></li>
+            </ul>
+
+            <div class="nav-btns">
+
+                <a href="login.html"
+                    class="login-btn"
+                    id="loginBtn">
+                    Login
+                </a>
+
+                <a href="register.html"
+                    class="register-btn"
+                    id="registerBtn">
+                    Register
+                </a>
+                <a href="mybookings.html"
+                    id="myBookingsLink"
+                    style="display:none;"
+                    class="login-btn">
+                    My Bookings
+                </a>
+
+                <button
+                    id="logoutBtn"
+                    onclick="logout()"
+                    style="display:none;"
+                    class="login-btn">
+                    Logout
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- DETAILS -->
+    <section class="container details-section">
+
+        <!-- LEFT -->
+        <div class="details-left">
+
+            <img src="./images/tour-img05.jpg" class="main-tour-img" id="tourMainImg">
+
+            <div class="tour-info">
+
+                <h1 id="tourTitle">Nusa Penida Bali, Indonesia</h1>
+
+                <div class="tour-meta">
+                    <span>⭐ <span id="tourRating">0.0</span> (<span id="tourReviewsCountHeader">0</span> Reviews)</span>
+                    <span id="tourLocation">📍 Bali, Indonesia</span>
+                </div>
+
+                <h3>Description</h3>
+
+                <p id="tourDesc">
+                    Experience the beauty of Bali with crystal clear
+                    beaches, breathtaking landscapes, cultural attractions,
+                    and unforgettable adventures.
+                </p>
+
+                <h3>Tour Features</h3>
+                <div class="features">
+                    <span>✔ Guided Tour</span>
+                    <span>✔ Free Transport</span>
+                    <span>✔ Food Included</span>
+                    <span>✔ Hotel Included</span>
+                    <span>✔ Photography Spots</span>
+                    <span>✔ Adventure Activities</span>
+                </div>
+            </div>
+
+            <div class="tour-info" style="margin-top:20px;">
+                <h3>Itinerary</h3>
+                <div id="tourItinerary" style="white-space: pre-wrap; font-size: 1rem; color: #475569; line-height: 1.6;">
+                    No itinerary available.
+                </div>
+            </div>
+
+            <!-- MAP SECTION -->
+            <div class="tour-info" style="margin-top:20px;">
+                <h3>Tour Location</h3>
+                <div id="tourMap" style="height: 350px; width: 100%; border-radius: 12px; margin-top: 15px; z-index: 1;"></div>
+            </div>
+
+            <!-- WEATHER SECTION -->
+            <div class="tour-info" style="margin-top:20px;">
+                <h3>Local Weather Forecast</h3>
+                <div id="weatherContainer" style="display: flex; gap: 15px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px;">
+                    <p style="color: #666;">Loading forecast...</p>
+                </div>
+            </div>
+
+            <!-- REVIEWS -->
+            <div class="reviews-section" style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <h2 id="reviewsCountTitle" style="margin-bottom: 15px;">Customer Reviews (0)</h2>
+                <div class="rating-box" id="reviewForm" style="display:none; flex-direction: column; gap:10px; margin-bottom: 25px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc;">
+                    <h4 style="margin:0; color:#334155;">Write a Review</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="number" id="reviewRating" min="1" max="5" value="5" style="width:80px; padding:10px; border-radius:8px; border:1px solid #cbd5e1; outline:none;" title="Rating (1-5) Stars">
+                        <input type="text" id="reviewPhotoUrl" placeholder="Image URL (optional)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #cbd5e1; outline:none;">
+                    </div>
+                    <textarea id="reviewText" placeholder="Share your experience with other travelers..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #cbd5e1; outline:none; resize:vertical; min-height:80px;"></textarea>
+                    <button onclick="submitReview()" style="align-self: flex-start; padding: 10px 20px; background: #f97316; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Submit Review</button>
+                </div>
+                <div id="reviewsList" style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="color:#64748b;">Loading reviews...</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT BOOKING -->
+        <div class="booking-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="margin-bottom: 0;">
+                    <span id="currencySymbol">Rs.</span><span id="tourPrice">99</span>
+                    <span style="font-size: 16px; font-weight: normal; color: #666;">/per person</span>
+                </h2>
+                <select id="currencySelect" onchange="changeCurrency()" style="padding: 8px; border-radius: 6px; border: 1px solid #ddd; outline: none; background: #fff; font-weight: 600;">
+                    <option value="INR">INR (Rs)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                </select>
+            </div>
+
+            <div class="booking-form">
+
+                <input type="text" id="guestName" placeholder="Full Name">
+                <input type="tel" id="guestPhone" placeholder="Phone Number">
+                <input type="date" id="bookingDate">
+                <input type="number" id="guestCount" placeholder="Guests" min="1" value="1">
+                <p id="bookingError" class="form-error"></p>
+
+            </div>
+
+            <div class="booking-summary">
+
+                <div>
+                    <span>Rs.<span id="tourBasePrice">99</span> × 1 Person</span>
+                    <span>Rs.<span id="tourSubtotal">99</span></span>
+                </div>
+
+                <div>
+                    <span>Service Charge</span>
+                    <span>Rs.10</span>
+                </div>
+
+                <hr>
+
+                <div class="total">
+                    <span>Total</span>
+                    <span>Rs.<span id="tourTotal">109</span></span>
+                </div>
+
+            </div>
+
+            <button class="book-btn" onclick="handleBookNow()">
+                Book Now
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- NEWSLETTER -->
+
+    <section class="newsletter">
+
+        <div class="container newsletter-content">
+
+            <div>
+
+                <h2>
+                    Subscribe now for useful travelling information.
+                </h2>
+
+                <div class="subscribe-box">
+
+                    <input type="email"
+                        placeholder="Enter your email">
+
+                    <button>
+                        Subscribe
+                    </button>
+
+                </div>
+
+            </div>
+
+            <img src="images/male-tourist.png">
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+   <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Ipsum, natus!</p>
+
+                <div class="social-icons">
+                   <i class="fa-solid fa-user-gear"></i>
+                    <i class="fa-brands fa-github"></i>
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Discover</h3>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Tours</a>
+            </div>
+
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <a href="#">Gallery</a>
+                <a href="#">Login</a>
+                <a href="#">Register</a>
+            </div>
+
+            <div class="footer-col2">
+                <h3>Contact</h3>
+
+                <p><i class="fa-solid fa-location-dot"></i><b>Address:</b> Shimogga, Karnataka</p>
+                <p><i class="fa-regular fa-envelope"></i><b>Email:</b> adarshaadi1997@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i><b>Phone:</b> +91 86604 35323</p>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright 2026, Design and develop by Adarsha A Helvar.
+            All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <!-- PAYMENT MODAL -->
+    <div class="payment-modal-overlay" id="paymentModalOverlay">
+        <div class="payment-modal">
+            <div class="payment-header">
+                <h3>Complete Payment</h3>
+                <button class="close-payment" onclick="closePaymentModal()">&times;</button>
+            </div>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                You are paying <strong id="paymentAmountDisplay" style="color: #000;"></strong> for <span id="paymentTourName"></span>.
+            </p>
+            <div id="paymentForm">
+                <label style="font-size:12px; font-weight:600; color:#555;">CARD NUMBER</label>
+                <input type="text" id="cardNum" class="stripe-input" placeholder="0000 0000 0000 0000" maxlength="19">
+                <div class="stripe-row">
+                    <div style="flex:1;">
+                        <label style="font-size:12px; font-weight:600; color:#555;">EXPIRY</label>
+                        <input type="text" id="cardExp" class="stripe-input" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-size:12px; font-weight:600; color:#555;">CVC</label>
+                        <input type="text" id="cardCvc" class="stripe-input" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+                <p id="paymentError" class="form-error"></p>
+                <button class="stripe-btn" onclick="processPayment()" id="payBtn">
+                    Pay Now <span class="payment-spinner" id="paySpinner"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="js/script.js"></script>
+    <script src="js/assistant.js"></script>
+
+</body>
+</html>

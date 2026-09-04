@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<!-- saved from url=(0027)http://127.0.0.1:5000/admin -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelWorld Admin</title>
+<link rel="stylesheet" href="./TravelWorld Admin_files/admin.css">
+<script src="./TravelWorld Admin_files/chart.js.download"></script>
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="center-screen hidden">
+    <div class="card">
+      <h2>Admin Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="adminLogin()">Login</button>
+      <p id="loginError" class="error"></p>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <section id="dashboardView" class="dashboard-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        TravelWorld
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-tab active" id="tabDashboard" onclick="switchTab(&#39;dashboard&#39;)">Dashboard</button>
+        <button class="nav-tab" id="tabBookings" onclick="switchTab(&#39;bookings&#39;)">Bookings</button>
+        <button class="nav-tab" id="tabTours" onclick="switchTab(&#39;tours&#39;)">Tours</button>
+        <button class="nav-tab" id="tabEscapes" onclick="switchTab(&#39;escapes&#39;)">Next Escapes</button>
+        <button class="nav-tab" id="tabInquiries" onclick="switchTab(&#39;inquiries&#39;)">Inquiries</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="adminLogout()">Logout</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="container">
+        
+        <!-- SECTION: DASHBOARD -->
+        <div id="sectionDashboard" class="dashboard-grid">
+          <div class="panel" style="grid-column: 1 / -1; display: flex; gap: 20px;">
+            <div style="flex: 1; background: linear-gradient(135deg, #f97316, #ec4899); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 10px;">Total Revenue</h3>
+                <h2 style="font-size: 32px;">Rs. <span id="dashRevenue">26,978</span></h2>
+            </div>
+            <div style="flex: 1; background: linear-gradient(135deg, #3b82f6, #2dd4bf); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 10px;">Total Bookings</h3>
+                <h2 style="font-size: 32px;"><span id="dashBookings">7</span></h2>
+            </div>
+          </div>
+          
+          <div class="panel">
+              <h2>Revenue Over Time</h2>
+              <div style="position: relative; height: 300px; width: 100%;">
+                  <canvas id="revenueChart" style="box-sizing: border-box; display: block; height: 300px; width: 322.4px;" width="403" height="375"></canvas>
+              </div>
+          </div>
+          
+          <div class="panel">
+              <h2>Popular Tours</h2>
+              <div style="position: relative; height: 300px; width: 100%;">
+                  <canvas id="popularToursChart" style="box-sizing: border-box; display: block; height: 300px; width: 726.4px;" width="908" height="375"></canvas>
+              </div>
+          </div>
+        </div>
+
+        <!-- SECTION: TOURS -->
+        <div id="sectionTours" class="hidden dashboard-grid">
+          <div class="panel">
+            <h2 id="formTitle">Add New Tour</h2>
+            <input type="hidden" id="tourId">
+            <input type="text" id="title" placeholder="Title">
+            <input type="text" id="city" placeholder="City">
+            <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center;">
+              <input type="text" id="photo" placeholder="Photo path (e.g. images/tour-img01.jpg)" style="flex: 1; margin: 0;">
+              <input type="file" id="photoFile" accept="image/*" style="width: auto; padding: 4px;" onchange="uploadImage()">
+            </div>
+            <textarea id="desc" placeholder="Description"></textarea>
+            <input type="number" id="price" placeholder="Price">
+            <input type="number" id="distance" placeholder="Distance">
+            <input type="number" id="maxGroupSize" placeholder="Max Group Size">
+            <label class="checkbox-label">
+              <input type="checkbox" id="featured"> Featured on home page
+            </label>
+            <div class="form-actions">
+              <button onclick="saveTour()">Save Tour</button>
+              <button class="secondary" onclick="resetForm()">Clear</button>
+            </div>
+          </div>
+
+          <div class="right-column">
+            <div class="panel">
+              <h2>All Tours (<span id="tourCount">8</span>)</h2>
+              <div class="table-container">
+                <table id="tourTable">
+                  <thead>
+                    <tr>
+                      <th>Title</th><th>City</th><th>Price</th><th>Featured</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tourTableBody">
+      <tr>
+        <td>Goa Beach Holiday</td>
+        <td>Goa</td>
+        <td>Rs.450</td>
+        <td>✅</td>
+        <td>
+          <button onclick="editTourById(&#39;8&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;8&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Machu Picchu Expedition</td>
+        <td>Cusco</td>
+        <td>Rs.1050</td>
+        <td>—</td>
+        <td>
+          <button onclick="editTourById(&#39;7&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;7&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Sahara Desert Safari</td>
+        <td>Marrakech</td>
+        <td>Rs.650</td>
+        <td>—</td>
+        <td>
+          <button onclick="editTourById(&#39;6&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;6&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Amazon Rainforest Trek</td>
+        <td>Manaus</td>
+        <td>Rs.899</td>
+        <td>—</td>
+        <td>
+          <button onclick="editTourById(&#39;5&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;5&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Tokyo City Lights</td>
+        <td>Tokyo</td>
+        <td>Rs.1150</td>
+        <td>✅</td>
+        <td>
+          <button onclick="editTourById(&#39;4&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;4&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Santorini Sunset Tour</td>
+        <td>Santorini</td>
+        <td>Rs.999</td>
+        <td>✅</td>
+        <td>
+          <button onclick="editTourById(&#39;3&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;3&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Swiss Alps Adventure</td>
+        <td>Zermatt</td>
+        <td>Rs.1299</td>
+        <td>✅</td>
+        <td>
+          <button onclick="editTourById(&#39;2&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;2&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Bali Paradise Escape</td>
+        <td>Bali</td>
+        <td>Rs.799</td>
+        <td>✅</td>
+        <td>
+          <button onclick="editTourById(&#39;1&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteTour(&#39;1&#39;)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End sectionTours -->
+
+        <!-- SECTION: ESCAPES -->
+        <div id="sectionEscapes" class="hidden dashboard-grid">
+          <div class="panel">
+            <h2 id="escFormTitle">Add New Escape</h2>
+            <input type="hidden" id="escId">
+            <input type="text" id="escTitle" placeholder="Title">
+            <input type="text" id="escCity" placeholder="City">
+            <input type="text" id="escPhoto" placeholder="Photo path (e.g. images/tour-img01.jpg)">
+            <textarea id="escDesc" placeholder="Description"></textarea>
+            <textarea id="escItinerary" placeholder="Itinerary (e.g. Day 1: Arrive&lt;br&gt;Day 2: Tour)"></textarea>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+              <input type="number" id="escPrice" placeholder="Price" style="flex: 1; margin: 0;">
+              <input type="number" id="escSlots" placeholder="Total Slots (Default: 20)" style="flex: 1; margin: 0;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+              <div style="flex: 1;"><label>Start Date</label><input type="date" id="escStart" style="margin: 0; width: 100%;" placeholder="YYYY-MM-DD"></div>
+              <div style="flex: 1;"><label>End Date</label><input type="date" id="escEnd" style="margin: 0; width: 100%;" placeholder="YYYY-MM-DD"></div>
+            </div>
+            <div class="form-actions">
+              <button onclick="saveEscape()">Save Escape</button>
+              <button class="secondary" onclick="resetEscapeForm()">Clear</button>
+              <p id="escFormMsg" style="margin-top:10px; font-weight:bold;"></p>
+            </div>
+          </div>
+          
+          <div class="right-column">
+            <div class="panel">
+              <h2>All Escapes</h2>
+              <div class="table-container">
+                <table id="escapeTable">
+                  <thead>
+                    <tr>
+                      <th>Title</th><th>Dates</th><th>Price</th><th>Slots</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="escapeTableBody">
+      <tr>
+        <td>Independence Day Goa Retreat</td>
+        <td>14/8/2026 - 17/8/2026</td>
+        <td>Rs.499</td>
+        <td>18/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;1&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;1&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Diwali Maldives Escape</td>
+        <td>6/11/2026 - 10/11/2026</td>
+        <td>Rs.1299</td>
+        <td>0/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;2&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;2&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Christmas in Swiss Alps</td>
+        <td>23/12/2026 - 27/12/2026</td>
+        <td>Rs.1599</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;3&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;3&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>New Year Dubai Bash</td>
+        <td>30/12/2026 - 3/1/2027</td>
+        <td>Rs.899</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;4&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;4&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Republic Day Rajasthan Tour</td>
+        <td>23/1/2027 - 26/1/2027</td>
+        <td>Rs.399</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;5&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;5&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Holi in Mathura</td>
+        <td>20/3/2027 - 23/3/2027</td>
+        <td>Rs.299</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;6&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;6&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Good Friday Kerala Backwaters</td>
+        <td>15/4/2027 - 18/4/2027</td>
+        <td>Rs.450</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;7&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;7&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Labor Day Bali Trip</td>
+        <td>30/4/2027 - 3/5/2027</td>
+        <td>Rs.950</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;8&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;8&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Summer Break Europe Eurotrip</td>
+        <td>15/6/2027 - 25/6/2027</td>
+        <td>Rs.2500</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;9&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;9&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Monsoon Trek in Sahyadris</td>
+        <td>10/7/2027 - 12/7/2027</td>
+        <td>Rs.150</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;10&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;10&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Raksha Bandhan Rishikesh Rafting</td>
+        <td>14/8/2027 - 16/8/2027</td>
+        <td>Rs.250</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;11&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;11&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Gandhi Jayanti Bhutan Peace Tour</td>
+        <td>1/10/2027 - 4/10/2027</td>
+        <td>Rs.600</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;12&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;12&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Dussehra Mysore Palace Visit</td>
+        <td>20/10/2027 - 24/10/2027</td>
+        <td>Rs.350</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;13&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;13&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Thanksgiving NYC Shopping</td>
+        <td>24/11/2027 - 28/11/2027</td>
+        <td>Rs.1800</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;14&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;14&#39;)">Delete</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>Winter Solstice Iceland Auroras</td>
+        <td>18/12/2027 - 22/12/2027</td>
+        <td>Rs.2200</td>
+        <td>20/20 left</td>
+        <td>
+          <button onclick="editEscapeById(&#39;15&#39;)">Edit</button>
+          <button class="secondary" onclick="deleteEscape(&#39;15&#39;)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Escape Bookings</h2>
+                <button class="btn" style="background: #27ae60; color: white; padding: 10px; border-radius: 5px; border: none; cursor: pointer;" onclick="exportBookings()"><i class="fas fa-file-excel"></i> Export to CSV</button>
+              </div>
+              <p style="color: #666; margin-top: 10px;">Download all customer booking data for your upcoming escapes.</p>
+            </div>
+          </div>
+        </div> <!-- End sectionEscapes -->
+
+        <!-- SECTION: BOOKINGS -->
+        <div id="sectionBookings" class="hidden">
+          <div class="panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>All Customer Bookings</h2>
+              <button class="btn" style="background: #27ae60; color: white; padding: 10px; border-radius: 5px; border: none; cursor: pointer;" onclick="exportBookings()"><i class="fas fa-file-excel"></i> Export Escape Bookings</button>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Customer</th><th>Contact</th><th>Type</th><th>Tour / Escape</th><th>Guests</th><th>Revenue</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+            <tr>
+                <td>4/8/2026, 10:19:22 am</td>
+                <td>vinay</td>
+                <td>8049936271</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Diwali Maldives Escape</td>
+                <td>1</td>
+                <td>Rs.1299</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;6&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>4/8/2026, 10:18:45 am</td>
+                <td>akash </td>
+                <td>6734425111</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Diwali Maldives Escape</td>
+                <td>5</td>
+                <td>Rs.6495</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;5&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>4/8/2026, 10:18:19 am</td>
+                <td>harsha</td>
+                <td>7411543578</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Diwali Maldives Escape</td>
+                <td>5</td>
+                <td>Rs.6495</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;4&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>4/8/2026, 10:12:03 am</td>
+                <td>sindhu</td>
+                <td>9743467060</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Diwali Maldives Escape</td>
+                <td>5</td>
+                <td>Rs.6495</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;3&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>4/8/2026, 9:02:51 am</td>
+                <td>varsha</td>
+                <td>7899734679</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Diwali Maldives Escape</td>
+                <td>4</td>
+                <td>Rs.5196</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;2&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>4/8/2026, 7:15:02 am</td>
+                <td>varsha</td>
+                <td>7899734679</td>
+                <td><span style="background:#a855f7; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Escape</span></td>
+                <td>Independence Day Goa Retreat</td>
+                <td>2</td>
+                <td>Rs.998</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;1&#39;, &#39;escape&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending">pending</option><option value="confirmed" selected="">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        
+            <tr>
+                <td>9/7/2026, 5:39:02 am</td>
+                <td>Varsshhh</td>
+                <td>7843798473</td>
+                <td><span style="background:#3b82f6; color:white; padding:2px 6px; border-radius:4px; font-size:12px;">Tour</span></td>
+                <td>Goa Beach Holiday</td>
+                <td>1</td>
+                <td>Rs.450</td>
+                <td>
+            <select onchange="updateBookingStatus(&#39;1&#39;, &#39;tour&#39;, this.value)" style="padding: 4px; border-radius: 4px; text-transform: capitalize;">
+                <option value="pending" selected="">pending</option><option value="confirmed">confirmed</option><option value="rejected">rejected</option><option value="cancelled">cancelled</option>
+            </select>
+        </td>
+            </tr>
+        </tbody>
+              </table>
+            </div>
+          </div>
+        </div> <!-- End sectionBookings -->
+
+        <!-- SECTION: INQUIRIES -->
+        <div id="sectionInquiries" class="hidden">
+          <div class="panel">
+            <h2>Customer Inquiries</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Name</th><th>Email</th><th>Message</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="messagesTableBody">
+      <tr>
+        <td>25/7/2026, 6:24:54 am</td>
+        <td>sindhu</td>
+        <td>sinduag61@gmail.com</td>
+        <td>hii</td>
+        <td>
+            <button onclick="openReplyModal(&#39;sinduag61@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>24/7/2026, 4:29:55 pm</td>
+        <td>varsha</td>
+        <td>varshabp556@gmail.com</td>
+        <td>hii</td>
+        <td>
+            <button onclick="openReplyModal(&#39;varshabp556@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>24/7/2026, 3:45:07 pm</td>
+        <td>Test</td>
+        <td>test@test.com</td>
+        <td>Test message</td>
+        <td>
+            <button onclick="openReplyModal(&#39;test@test.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>24/7/2026, 3:39:03 pm</td>
+        <td>varsha</td>
+        <td>varshabp556@gmail.com</td>
+        <td>hiii</td>
+        <td>
+            <button onclick="openReplyModal(&#39;varshabp556@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>24/7/2026, 1:25:40 pm</td>
+        <td>varsha</td>
+        <td>varshabp556@gmail.com</td>
+        <td>wt r u doing?</td>
+        <td>
+            <button onclick="openReplyModal(&#39;varshabp556@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>14/7/2026, 5:48:40 am</td>
+        <td>varsha</td>
+        <td>varshabp556@gmail.com</td>
+        <td>How can we book a tour</td>
+        <td>
+            <button onclick="openReplyModal(&#39;varshabp556@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    
+      <tr>
+        <td>10/7/2026, 4:28:32 am</td>
+        <td>varsha</td>
+        <td>varshabp556@gmail.com</td>
+        <td>How much time takes you to plan a trip</td>
+        <td>
+            <button onclick="openReplyModal(&#39;varshabp556@gmail.com&#39;)">Reply</button>
+        </td>
+      </tr>
+    </tbody>
+              </table>
+            </div>
+          </div>
+        </div> <!-- End sectionInquiries -->
+
+      </div>
+    </main>
+  </section>
+
+  <!-- REPLY MODAL -->
+  <div id="replyModal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center;">
+    <div class="card" style="width: 500px; max-width: 90%;">
+      <h2>Reply to Customer</h2>
+      <p><strong>To: </strong><span id="replyEmailLabel"></span></p>
+      <input type="hidden" id="replyEmailInput">
+      <textarea id="replyTextInput" rows="6" placeholder="Type your reply here..." style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+      <div class="form-actions" style="margin-top: 15px;">
+        <button onclick="sendReply()">Send Reply</button>
+        <button class="secondary" onclick="closeReplyModal()">Cancel</button>
+      </div>
+      <p id="replyStatus" style="margin-top: 10px;"></p>
+    </div>
+  </div>
+
+  <script src="./TravelWorld Admin_files/admin.js.download"></script>
+
+</body></html>

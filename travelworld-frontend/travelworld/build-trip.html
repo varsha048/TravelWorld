@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build My Trip - AI Generator | TravelWorld</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        .ai-hero {
+            padding: 80px 0;
+            background: radial-gradient(circle at center, rgba(168, 85, 247, 0.1) 0%, transparent 60%);
+            text-align: center;
+        }
+        
+        .ai-hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .ai-hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .builder-container {
+            max-width: 800px;
+            margin: -40px auto 100px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .builder-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .builder-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .builder-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .builder-group input, .builder-group select {
+            padding: 14px 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .builder-group input:focus, .builder-group select:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: var(--radius-full);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(168, 85, 247, 0.4);
+        }
+        
+        .ai-result {
+            display: none;
+            margin-top: 40px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 40px;
+        }
+        
+        .day-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .day-card h4 {
+            color: #a855f7;
+            margin-bottom: 10px;
+        }
+        
+        .day-card ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+        
+        .day-card li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .day-card li::before {
+            content: "•";
+            color: #ec4899;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="./images/logo.png" alt="TravelWorld Logo">
+            </a>
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="tours.html">Tours</a></li>
+            </ul>
+            <div class="nav-btns" id="navAuth">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="register.html" class="register-btn">Register</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="ai-hero">
+        <div class="container">
+            <h1>Build Your Custom Trip with AI</h1>
+            <p>Tell us where you want to go and what you love doing, and our smart AI will generate a personalized itinerary in seconds.</p>
+        </div>
+    </div>
+
+    <div class="container builder-container">
+        <div class="builder-row">
+            <div class="builder-group">
+                <label>Destination</label>
+                <input type="text" id="aiDest" placeholder="e.g. Tokyo, Japan">
+            </div>
+            <div class="builder-group">
+                <label>Duration (Days)</label>
+                <input type="number" id="aiDays" value="3" min="1" max="14">
+            </div>
+        </div>
+        <div class="builder-row">
+            <div class="builder-group">
+                <label>Budget Level</label>
+                <select id="aiBudget">
+                    <option value="budget">Budget Friendly</option>
+                    <option value="medium" selected>Standard</option>
+                    <option value="luxury">Luxury / Premium</option>
+                </select>
+            </div>
+            <div class="builder-group">
+                <label>Primary Interests</label>
+                <input type="text" id="aiInterests" placeholder="e.g. Food, Culture, Nature">
+            </div>
+        </div>
+        
+        <p id="aiError" class="form-error"></p>
+        
+        <button class="generate-btn" id="generateBtn" onclick="generateTrip()">
+            <i class="fa fa-wand-magic-sparkles"></i> Generate Itinerary
+        </button>
+        
+        <div id="aiResult" class="ai-result">
+            <h2 id="resTitle" style="margin-bottom:10px; font-size:28px;"></h2>
+            <p id="resDesc" style="color:var(--text-muted); margin-bottom:30px; font-size:18px; line-height:1.6;"></p>
+            
+            <div id="resDays"></div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; text-align: center;">
+                <h3 style="color: #a855f7;">Estimated Cost: Rs.<span id="resCost">0</span></h3>
+                <p style="color: #666; font-size: 14px; margin-top: 5px;">This is a rough estimate and does not include flights.</p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px; justify-content: center;">
+                <button class="generate-btn" style="width: auto; padding: 12px 24px; font-size: 16px;" onclick="downloadPdf()">
+                    <i class="fa fa-file-pdf"></i> Download PDF
+                </button>
+                <button class="generate-btn" style="width: auto; padding: 12px 24px; font-size: 16px; background: linear-gradient(135deg, #3b82f6, #2dd4bf);" onclick="emailTrip()" id="emailBtn">
+                    <i class="fa fa-envelope"></i> Email Itinerary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let currentTripData = null;
+
+        async function generateTrip() {
+            const dest = document.getElementById("aiDest").value.trim();
+            const days = parseInt(document.getElementById("aiDays").value) || 3;
+            const budget = document.getElementById("aiBudget").value;
+            const interests = document.getElementById("aiInterests").value.trim();
+            const btn = document.getElementById("generateBtn");
+            const err = document.getElementById("aiError");
+            
+            if(!dest) {
+                err.textContent = "Please enter a destination.";
+                return;
+            }
+            
+            err.textContent = "";
+            btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> Generating magic...`;
+            btn.disabled = true;
+            
+            try {
+                const res = await apiRequest("/ai-trip/generate", "POST", {
+                    destination: dest,
+                    days: days,
+                    budget: budget,
+                    interests: interests || "general sightseeing"
+                });
+                
+                if(res && res.status === "success") {
+                    const data = res.data;
+                    currentTripData = data;
+                    document.getElementById("resTitle").textContent = data.title;
+                    document.getElementById("resDesc").textContent = data.description;
+                    document.getElementById("resCost").textContent = data.estimated_cost_usd;
+                    
+                    const daysHtml = data.itinerary.map(d => `
+                        <div class="day-card">
+                            <h4>Day ${d.day}</h4>
+                            <ul>
+                                ${d.activities.map(a => `<li>${a}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById("resDays").innerHTML = daysHtml;
+                    document.getElementById("aiResult").style.display = "block";
+                } else {
+                    err.textContent = res ? res.message : "Failed to generate.";
+                }
+            } catch(e) {
+                err.textContent = "An error occurred.";
+            }
+            
+            btn.innerHTML = `<i class="fa fa-wand-magic-sparkles"></i> Generate Itinerary`;
+            btn.disabled = false;
+        }
+        
+        function downloadPdf() {
+            const element = document.getElementById("aiResult");
+            const opt = {
+              margin:       10,
+              filename:     'My_TravelWorld_Itinerary.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+        
+        async function emailTrip() {
+            if (!currentTripData) return;
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                alert("Please login first to send the itinerary to your email.");
+                window.location.href = "login.html";
+                return;
+            }
+            
+            const user = JSON.parse(userStr);
+            const btn = document.getElementById("emailBtn");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> Sending...`;
+            btn.disabled = true;
+            
+            try {
+                const res = await apiRequest("/ai-trip/email", "POST", {
+                    email: user.email,
+                    trip: currentTripData
+                });
+                if (res && res.status === "success") {
+                    alert("Itinerary sent successfully to " + user.email + "!");
+                } else {
+                    alert("Failed to send email: " + (res ? res.message : "Unknown error"));
+                }
+            } catch (err) {
+                alert("An error occurred while sending email.");
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        
+        checkAuth(); // from script.js
+    </script>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Escapes - Travel World</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        .hero-escapes {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-escapes h1 {
+            color: #fff;
+            font-size: 4rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .escapes-section {
+            padding: 80px 0;
+            background-color: #f9f9f9;
+        }
+
+        .escapes-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #2c3e50;
+        }
+
+        .escapes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .escape-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .escape-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .escape-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .escape-content {
+            padding: 20px;
+        }
+
+        .escape-content h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .escape-date {
+            color: #e67e22;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .escape-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .slots-container {
+            margin-bottom: 20px;
+        }
+
+        .slots-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .slots-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .slots-fill {
+            height: 100%;
+            background: #27ae60;
+            border-radius: 4px;
+        }
+
+        .slots-fill.low {
+            background: #e74c3c;
+        }
+
+        .escape-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .escape-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .escape-price span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #888;
+        }
+
+        .book-escape-btn {
+            background: #ff7c5b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .book-escape-btn:hover {
+            background: #e66a4a;
+        }
+
+        .book-escape-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            width: 900px;
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 12px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            z-index: 2;
+        }
+
+        .modal-left {
+            flex: 1;
+            padding: 40px;
+            background: #f9f9f9;
+            overflow-y: auto;
+            border-right: 1px solid #eee;
+        }
+
+        .modal-left h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .modal-left img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .itinerary-box {
+            line-height: 1.6;
+            color: #444;
+            padding-left: 20px;
+            border-left: 2px solid #ff7c5b;
+            position: relative;
+        }
+
+        .itinerary-box br {
+            display: none;
+        }
+
+        .itinerary-item {
+            position: relative;
+            margin-bottom: 15px;
+            padding-left: 15px;
+        }
+
+        .itinerary-item::before {
+            content: "";
+            position: absolute;
+            left: -25.5px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: #ff7c5b;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .itinerary-item strong {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .modal-right {
+            width: 400px;
+            padding: 40px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-right h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .booking-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .booking-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .booking-form input, .booking-form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .booking-form .submit-btn {
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .booking-form .submit-btn:hover {
+            background: #219653;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav">
+            <div class="logo">
+                <img src="./images/logo.png" alt="logo">
+            </div>
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="tours.html">Tours</a></li>
+                <li><a href="next-escapes.html">Next Escapes</a></li>
+            </ul>
+            <div class="nav-btns">
+                <button id="darkModeToggle" class="login-btn" style="background:var(--bg-light); color:var(--text-main); border:1px solid var(--surface-border); padding: 8px 12px; margin-right:5px; cursor: pointer;"><i class="fas fa-moon"></i></button>
+                <a href="profile.html" id="profileLink" style="display:none; margin-right:5px;" class="login-btn">My Profile</a>
+                <a href="login.html" class="login-btn" id="loginBtn">Login</a>
+                <a href="register.html" class="register-btn" id="registerBtn">Register</a>
+                <a href="mybookings.html" id="myBookingsLink" style="display:none;" class="login-btn">My Bookings</a>
+                <button id="logoutBtn" onclick="logout()" style="display:none;" class="login-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-escapes">
+        <h1>Next Escapes</h1>
+    </div>
+
+    <section class="escapes-section container">
+        <h2>Upcoming Planned Packages</h2>
+        <div class="escapes-grid" id="escapesGrid">
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
+        </div>
+    </section>
+
+    <!-- ESCAPE BOOKING MODAL -->
+    <div class="modal-overlay" id="escapeModal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeEscapeModal()"><i class="fas fa-times"></i></div>
+            
+            <div class="modal-left">
+                <img id="modalImg" src="" alt="Escape Image">
+                <h2 id="modalTitle">Escape Title</h2>
+                <div class="escape-date" style="margin-bottom: 20px; color: #e67e22; font-weight: 600;">
+                    <i class="far fa-calendar-alt"></i> <span id="modalDate">Dates</span>
+                </div>
+                <h3>Itinerary</h3>
+                <div id="modalItinerary" class="itinerary-box"></div>
+            </div>
+            
+            <div class="modal-right">
+                <h3>Book Your Spot</h3>
+                <p style="margin-bottom: 20px; font-weight: 500; font-size: 1.2rem; color: #2c3e50;">
+                    Price: Rs.<span id="modalPrice"></span> <span style="font-size: 0.9rem; color: #888;">/person</span>
+                </p>
+
+                <div id="bookingStep1">
+                    <form class="booking-form" id="escapeBookingForm" onsubmit="proceedToPayment(event)">
+                        <input type="hidden" id="modalEscapeId">
+                        
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="escapeGuestName" required placeholder="John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="escapeGuestPhone" required placeholder="+1 234 567 8900">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Number of Guests (Slots)</label>
+                            <select id="escapeGuestCount" onchange="updateTotalCost()">
+                                <option value="1">1 Person</option>
+                                <option value="2">2 People</option>
+                                <option value="3">3 People</option>
+                                <option value="4">4 People</option>
+                                <option value="5">5 People</option>
+                            </select>
+                        </div>
+                        
+                        <p style="text-align:right; font-weight:bold; margin-bottom:15px;">Total: Rs.<span id="modalTotalCost">0</span></p>
+                        
+                        <button type="submit" class="submit-btn" id="escapeProceedBtn">Proceed to Payment</button>
+                        <p id="escapeStatus1" style="text-align: center; margin-top: 10px; font-size: 0.9rem;"></p>
+                    </form>
+                </div>
+
+                <div id="bookingStep2" style="display:none;">
+                    <h4 style="margin-bottom: 10px;">Payment Details</h4>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Amount to Pay: <strong style="color: #27ae60; font-size: 1.1rem;">Rs.<span id="paymentAmount">0</span></strong></p>
+                    <form class="booking-form" id="paymentForm" onsubmit="submitEscapeBooking(event)">
+                        <p style="text-align: center; margin-bottom: 20px; font-size: 0.9rem; color: #666;">
+                            You will be securely redirected to Stripe to complete your payment.
+                        </p>
+                        <div style="display: flex; gap: 10px; margin-top:10px;">
+                            <button type="button" class="submit-btn" style="background:#888; flex:1;" onclick="backToStep1()">Back</button>
+                            <button type="submit" class="submit-btn" id="escapeSubmitBtn" style="flex:2;">Proceed to Stripe Checkout</button>
+                        </div>
+                        <p id="escapeStatus" style="text-align: center; margin-top: 10px; font-size: 0.9rem;"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="./images/logo.png" alt="Logo" class="footer-logo">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Ipsum, natus!</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Discover</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="tours.html">Tours</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Travel World, IN</li>
+                    <li><i class="fas fa-envelope"></i> admin@travelworld.com</li>
+                    <li><i class="fas fa-phone"></i> +91 9876543210</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2024. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/assistant.js"></script>
+</body>
+</html>
